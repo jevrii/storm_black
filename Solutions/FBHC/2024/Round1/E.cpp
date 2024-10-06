@@ -244,6 +244,7 @@ class test_instance {
 public:
     int n;
     vector<string> v;
+    int masks[30][105] = {0};
 
     void input()
     {
@@ -257,13 +258,25 @@ public:
 
     void solve()
     {
+        int n;
+        vector<string> v;
+        int masks[30][110] = {0};
+
+        cin >> n;
+        for (int i = 0; i < n; i++) {
+            string s;
+            cin >> s;
+            v.push_back(s);
+        }
+
         mod_int ans = 0;
 
-        vector<vector<int>> masks(128, vector<int>(105));
-        for (int len = 0; len <= 105; ++len) {
+        // vector<vector<int>> masks(128, vector<int>(105));
+        for (int len = 0; len < 105; ++len) {
             auto fill_mask = [&](char c) {
                 int mask = 0;
                 for (int i = 0; i < n; i++) {
+                    assert(i < v.size());
                     if (len >= v[i].size()) {
                         continue;
                     }
@@ -271,7 +284,12 @@ public:
                         mask |= (1 << i);
                     }
                 }
-                masks[c][len] = mask;
+                if (c == '?') {
+                    masks[26][len] = mask;
+                } else {
+                    // cerr << (int)(c - 'A') << ' ' << len << ' ' << mask << '\n';
+                    masks[c - 'A'][len] = mask;
+                }
             };
             fill_mask('?');
             for (char c = 'A'; c <= 'Z'; ++c) {
@@ -288,12 +306,20 @@ public:
             mod_int cur_prefix = 1;
             mod_int cur_add = 1;
 
-            int max_len = 0;
+            int min_len = INF;
             for (int i = 0; i < n; i++) {
                 if (!!((1 << i) & bs)) {
-                    max_len = max(max_len, (int)v[i].size());
+                    min_len = min(min_len, (int)v[i].size());
                 }
             }
+
+            auto get_mask = [&](char c, int len) -> int {
+                assert(len < 105);
+                if (c == '?') {
+                    return masks[26][len];
+                }
+                return masks[c - 'A'][len];
+            };
 
             for (int len = 0; len <= 105; ++len) {
                 int state = -1;
@@ -303,19 +329,21 @@ public:
 
                 // judge: all ?, all ? and single char, multiple char (conflict)
                 do {
-                    if (len >= max_len) {
+                    if (len >= min_len) {
                         state = STATE_CONFLICT;
                         break;
                     } else {
-                        int wildcard_mask = masks['?'][len];
+                        int wildcard_mask = get_mask('?', len);
                         if ((bs & wildcard_mask) == bs) {
                             state = STATE_ALL_WILDCARD;
                             break;
                         }
                         int rem_mask = bs ^ (bs & wildcard_mask);
                         int one_rem_idx = __builtin_ctz(rem_mask);
+                        assert(one_rem_idx < n);
+                        assert(len < v[one_rem_idx].size());
                         char one_c = v[one_rem_idx][len];
-                        if ((rem_mask & masks[one_c][len]) == rem_mask) {
+                        if ((rem_mask & get_mask(one_c, len)) == rem_mask) {
                             state = STATE_ALL_CHAR;
                             break;
                         } else {
