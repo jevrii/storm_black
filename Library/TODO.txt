@@ -1,0 +1,8 @@
+TODO:
+•	MATH3600: Stirling numbers, Bell numbers, integer partitioning
+•	STAT2601: nHr, Discrete distributions, Generating function, Inclusion-Exclusion
+•	Monotonic queue/stack
+•	DirectedMST
+•	Flow MaxClique
+
+
