@@ -39,12 +39,7 @@ inline constexpr ll INF = 0x3f3f3f3f3f3f3f3f;
 // inline constexpr ll MOD = 998244353LL;
 // inline constexpr ll MOD = 1000000007LL;
 
-void solve()
-{
-    int a, b;
-    cin >> a >> b;
-    cout << a + b << '\n';
-}
+void solve() {}
 
 int main()
 {
@@ -59,11 +54,32 @@ int main()
     cin.tie(nullptr);
 #endif
 
+#ifdef LOCAL
+    static const auto run_with_stack_size = [](void (*func)(void), size_t stsize) {
+        char *stack, *send;
+        stack = (char*)malloc(stsize);
+        send = stack + stsize - 16;
+        send = (char*)((uintptr_t)send / 16 * 16);
+        asm volatile("mov %%rsp, (%0)\n"
+                     "mov %0, %%rsp\n"
+                     :
+                     : "r"(send));
+        func();
+        asm volatile("mov (%0), %%rsp\n" : : "r"(send));
+        free(stack);
+    };
+#endif
+
     int t = 1;
     // cin >> t;
     for (int no = 1; no <= t; no++) {
         // cout << "Case #" << no << ": ";
+#ifdef LOCAL
+        // run with 16GB stack
+        run_with_stack_size(solve, static_cast<size_t>(16) * 1024 * 1024 * 1024);
+#else
         solve();
+#endif
     }
 
 #ifdef LOCAL
