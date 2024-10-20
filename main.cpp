@@ -16,10 +16,12 @@ using pll = pair<ll, ll>;
 #define mp make_pair
 #define pb push_back
 
+inline constexpr const char* ANSI_GREEN = "\e[0;32m";
+
 #define DEBUG 1
 #define cerr   \
     if (DEBUG) \
-    cerr
+    cerr << ANSI_GREEN
 #define test cerr << "hi\n";
 
 template<typename T>
@@ -83,7 +85,6 @@ int main()
     }
 
 #ifdef LOCAL
-    cerr << "\e[0;32m"
-         << "TIME ELAPSED: " << double(clock() - start_time) / CLOCKS_PER_SEC << '\n';
+    cerr << "TIME ELAPSED: " << double(clock() - start_time) / CLOCKS_PER_SEC << '\n';
 #endif
 }
