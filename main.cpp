@@ -51,7 +51,7 @@ int main()
     // freopen("output.txt", "w", stdout);
 #endif
 
-#ifndef INTERACIVE
+#ifndef INTERACTIVE
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
 #endif
