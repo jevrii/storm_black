@@ -12,13 +12,23 @@ using pll = pair<ll, ll>;
 #define mp make_pair
 #define pb push_back
 
-inline constexpr const char* ANSI_GREEN = "\e[0;32m";
+class custom_err_ostream {
+public:
+    template<typename T>
+    custom_err_ostream& operator<<([[maybe_unused]] const T& obj)
+    {
+#ifdef LOCAL
+        static constexpr const char* ANSI_GREEN = "\e[0;32m";
+        static constexpr const char* ANSI_RESET = "\e[0m";
+        cerr << ANSI_GREEN << obj << ANSI_RESET;
+#endif
+        return *this;
+    }
+};
 
-#define DEBUG 1
-#define cerr   \
-    if (DEBUG) \
-    cerr << ANSI_GREEN
-#define test cerr << "hi\n";
+custom_err_ostream jerr;
+
+#define test jerr << "hi\n";
 
 template<typename T>
 T rand(T l, T r)
@@ -69,18 +79,18 @@ int main()
 #endif
 
     int t = 1;
-    // cin >> t;
+    cin >> t;
     for (int no = 1; no <= t; no++) {
         // cout << "Case #" << no << ": ";
 #ifdef LOCAL
-        // run with 16GB stack
-        run_with_stack_size(solve, static_cast<size_t>(16) * 1024 * 1024 * 1024);
+        // run with 1GB stack
+        run_with_stack_size(solve, static_cast<size_t>(1) * 1024 * 1024 * 1024);
 #else
         solve();
 #endif
     }
 
 #ifdef LOCAL
-    cerr << "TIME ELAPSED: " << double(clock() - start_time) / CLOCKS_PER_SEC << '\n';
+    jerr << "TIME ELAPSED: " << double(clock() - start_time) / CLOCKS_PER_SEC << '\n';
 #endif
 }
