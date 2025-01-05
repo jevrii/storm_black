@@ -1,10 +1,6 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 
-#ifdef LOCAL
-#pragma GCC optimize("trapv")
-#endif
-
 using namespace std;
 
 using ll = long long;
